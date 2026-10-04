@@ -1,0 +1,31 @@
+# Tugas Mandiri 2 - HTTP Status Code
+
+## Hasil Pengujian
+
+| Status Code | Arti | Hasil Pengujian |
+|---|---|---|
+| 200 | OK | Request berhasil |
+| 201 | Created | Resource berhasil dibuat |
+| 400 | Bad Request | Request tidak valid |
+| 401 | Unauthorized | Membutuhkan autentikasi |
+| 403 | Forbidden | Akses ditolak |
+| 404 | Not Found | Resource tidak ditemukan |
+| 500 | Internal Server Error | Terjadi kesalahan di server |
+
+## Analisis
+
+### 1. Perbedaan 400 dan 404
+
+400 Bad Request menunjukkan bahwa request yang dikirim tidak valid. Sedangkan 404 Not Found menunjukkan bahwa resource yang diminta tidak ditemukan.
+
+### 2. Perbedaan 401 dan 403
+
+401 Unauthorized berkaitan dengan autentikasi. Sementara 403 Forbidden menunjukkan bahwa pengguna tidak memiliki izin untuk mengakses resource tersebut.
+
+### 3. Mengapa 500 merupakan kesalahan server?
+
+Status 500 menunjukkan bahwa terjadi masalah ketika server memproses request. Kesalahan tersebut berasal dari proses internal server.
+
+### 4. Apakah semua HTTP error berarti server rusak?
+
+Tidak. Status 4xx biasanya menunjukkan masalah pada request atau akses dari client. Status 5xx menunjukkan adanya masalah pada sisi server.
