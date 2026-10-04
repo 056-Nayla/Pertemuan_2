@@ -1,1 +1,114 @@
+# Tugas Mandiri 5 — Membandingkan SQL Mentah dan ORM
 
+## A. Operasi Database
+
+Operasi database yang digunakan adalah **mengambil satu data berdasarkan ID** pada tabel `jadwal`.
+
+Contoh data pada tabel `jadwal`:
+
+| id | mata_kuliah          | status |
+| -: | -------------------- | ------ |
+|  1 | Pemrograman Platform | aktif  |
+|  2 | Basis Data           | aktif  |
+|  3 | Kecerdasan Buatan    | aktif  |
+
+Data yang ingin diambil adalah data dengan `id = 1`.
+
+## B. SQL Mentah
+
+SQL mentah digunakan dengan menuliskan query SQL secara langsung.
+
+```sql
+SELECT *
+FROM jadwal
+WHERE id = ?;
+```
+
+Jika menggunakan Node.js dengan `mysql2`, contohnya:
+
+```javascript
+const [rows] = await connection.execute(
+  'SELECT * FROM jadwal WHERE id = ?',
+  [1]
+);
+
+console.log(rows);
+```
+
+Query tersebut digunakan untuk mengambil satu data dari tabel `jadwal` berdasarkan ID.
+
+## C. ORM
+
+Operasi yang sama dapat dilakukan menggunakan ORM seperti Prisma.
+
+```javascript
+const jadwal = await prisma.jadwal.findUnique({
+  where: {
+    id: 1
+  }
+});
+
+console.log(jadwal);
+```
+
+Dengan ORM, programmer tidak perlu menuliskan query SQL secara langsung untuk operasi tersebut. Prisma menggunakan model dan method untuk mengakses database.
+
+## D. Perbandingan SQL Mentah dan ORM
+
+| Aspek         | SQL Mentah                            | ORM                                  |
+| ------------- | ------------------------------------- | ------------------------------------ |
+| Penulisan     | Menggunakan query SQL secara langsung | Menggunakan model dan method ORM     |
+| Kontrol query | Lebih besar                           | Lebih abstrak                        |
+| Kemudahan     | Membutuhkan pemahaman SQL             | Lebih mudah untuk operasi umum       |
+| Fleksibilitas | Sangat fleksibel                      | Bergantung pada fitur ORM            |
+| Pengembangan  | Query dikelola programmer             | Struktur model membantu pengembangan |
+| Abstraksi     | Rendah                                | Tinggi                               |
+
+## E. Jawaban Pertanyaan
+
+### 1. Apa perbedaan SQL mentah dan ORM?
+
+SQL mentah merupakan pendekatan ketika programmer menulis perintah SQL secara langsung untuk berkomunikasi dengan database. Sedangkan ORM memberikan lapisan abstraksi sehingga programmer dapat mengakses database menggunakan model, objek, dan method yang disediakan oleh ORM.
+
+### 2. Apa kelebihan SQL mentah?
+
+SQL mentah memberikan kontrol yang lebih besar terhadap query yang dijalankan. Programmer dapat membuat query yang kompleks dan memanfaatkan fitur khusus dari database secara lebih langsung.
+
+### 3. Apa kelebihan ORM?
+
+ORM membuat kode akses database menjadi lebih sederhana dan terstruktur. Programmer dapat menggunakan method yang tersedia pada ORM tanpa harus menulis query SQL secara manual untuk setiap operasi database.
+
+### 4. Apa risiko SQL injection?
+
+SQL injection adalah serangan yang terjadi ketika input pengguna dimasukkan ke dalam query SQL secara tidak aman. Penyerang dapat memanfaatkan input tersebut untuk mengubah struktur atau tujuan query sehingga data dapat diakses atau dimanipulasi tanpa izin.
+
+Contoh kode yang tidak aman:
+
+```javascript
+const query = "SELECT * FROM jadwal WHERE id = " + id;
+```
+
+Jika nilai `id` berasal dari input pengguna dan langsung digabungkan ke query, aplikasi dapat menjadi rentan terhadap SQL injection.
+
+### 5. Mengapa penggunaan parameter query dapat mengurangi risiko SQL injection?
+
+Parameter query memisahkan nilai input dari struktur perintah SQL. Nilai yang diberikan pengguna diperlakukan sebagai data dan bukan sebagai bagian dari sintaks SQL.
+
+Contohnya:
+
+```javascript
+const [rows] = await connection.execute(
+  'SELECT * FROM jadwal WHERE id = ?',
+  [id]
+);
+```
+
+Dengan pendekatan tersebut, nilai `id` diberikan sebagai parameter sehingga tidak langsung digabungkan dengan query SQL.
+
+### 6. Bagaimana ORM membantu programmer dalam mengakses database?
+
+ORM menyediakan model dan method yang dapat digunakan programmer untuk melakukan operasi database. Programmer dapat melakukan operasi seperti mengambil, menambahkan, mengubah, dan menghapus data melalui kode program tanpa harus selalu menulis SQL secara manual.
+
+## F. Kesimpulan
+
+SQL mentah dan ORM memiliki tujuan yang sama, yaitu membantu aplikasi berkomunikasi dengan database, tetapi pendekatannya berbeda. SQL mentah memberikan kontrol yang lebih besar terhadap query, sedangkan ORM memberikan abstraksi sehingga proses pengembangan menjadi lebih sederhana dan terstruktur. Keduanya tetap membutuhkan perhatian terhadap keamanan, terutama dalam menangani input pengguna agar aplikasi tidak rentan terhadap SQL injection.
