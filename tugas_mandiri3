@@ -1,0 +1,34 @@
+# Tugas Mandiri 3 - Request dan Response
+
+## 1. Request dan Response
+
+Request adalah permintaan yang dikirimkan oleh client kepada server untuk meminta atau mengirimkan suatu informasi. Response adalah balasan dari server setelah menerima dan memproses request tersebut.
+
+Pada pengujian endpoint `/get`, client mengirimkan request GET kepada HTTPBin dengan parameter `nama=Umar` dan `kelas=TI`. Server kemudian memberikan response yang berisi informasi mengenai request tersebut.
+
+## 2. Query Parameter
+
+Query parameter adalah data tambahan yang dikirim melalui URL setelah tanda `?`.
+
+Contohnya:
+
+`https://httpbin.org/get?nama=Umar&kelas=TI`
+
+Pada URL tersebut terdapat dua query parameter, yaitu:
+
+- `nama` dengan nilai `Umar`
+- `kelas` dengan nilai `TI`
+
+HTTPBin mengembalikan kedua nilai tersebut pada bagian `args` dalam response.
+
+## 3. HTTP Header
+
+HTTP header merupakan informasi tambahan yang dikirim bersama request atau response. Header dapat berisi informasi seperti jenis data, user agent, dan informasi lain yang membantu server atau client memahami request.
+
+Pada endpoint `/headers`, HTTPBin menampilkan header yang diterima dari request.
+
+## 4. Perbedaan URL dan Request Body
+
+Data pada URL biasanya digunakan untuk query parameter dan dapat terlihat langsung pada alamat URL. Contohnya adalah `nama=Umar` dan `kelas=TI`.
+
+Request body merupakan bagian dari request yang digunakan untuk membawa data yang dikirim ke server, terutama pada method seperti POST, PUT, dan PATCH. Data pada body tidak dituliskan langsung setelah alamat URL.
