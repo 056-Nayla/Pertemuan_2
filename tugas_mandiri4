@@ -1,0 +1,38 @@
+# Tugas Mandiri 4 - cURL
+
+## 1. GET
+
+**Command:**
+
+`curl.exe -i "https://httpbin.org/get"`
+
+**Method:** GET
+
+**Endpoint:** `/get`
+
+**Tujuan:** Mengambil data dari endpoint HTTPBin.
+
+**Status:** 200 OK
+
+---
+
+## 2. POST
+
+**Command:**
+
+`curl.exe -i -X POST "https://httpbin.org/post" -H "Content-Type: application/json" -d '{"nama":"Umar","kelas":"Informatika"}'`
+
+**Method:** POST
+
+**Endpoint:** `/post`
+
+**Data yang dikirim:**
+
+```json
+{
+  "nama": "Umar",
+  "kelas": "Informatika"
+}
+## Perbandingan curl -s dan curl -i
+
+`curl -s` digunakan untuk menjalankan cURL dalam mode silent sehingga informasi tambahan seperti progress meter tidak ditampilkan. Response body dari server tetap ditampilkan. Sementara itu, `curl -i` menampilkan response body sekaligus HTTP response header. Oleh karena itu, `curl -i` lebih berguna ketika ingin melihat status HTTP dan informasi header, sedangkan `curl -s` lebih sederhana jika hanya membutuhkan isi response.
