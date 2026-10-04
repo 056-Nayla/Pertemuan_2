@@ -1,22 +1,27 @@
 # Tugas Mandiri 5 — Membandingkan SQL Mentah dan ORM
 
-## A. Operasi Database
+## 1. Operasi Database yang Dipilih
 
-Operasi database yang digunakan adalah **mengambil satu data berdasarkan ID** pada tabel `jadwal`.
+Operasi database yang digunakan pada tugas ini adalah **mengambil satu data berdasarkan ID**. Contoh tabel yang digunakan adalah tabel `jadwal`. Data yang ingin diambil adalah data jadwal dengan `id = 1`.
+
+Operasi ini dipilih karena merupakan operasi database yang sederhana dan umum digunakan dalam aplikasi, misalnya ketika aplikasi ingin menampilkan detail satu jadwal tertentu berdasarkan ID.
 
 Contoh data pada tabel `jadwal`:
 
-| id | mata_kuliah          | status |
-| -: | -------------------- | ------ |
-|  1 | Pemrograman Platform | aktif  |
-|  2 | Basis Data           | aktif  |
-|  3 | Kecerdasan Buatan    | aktif  |
+| id | mata_kuliah     | hari   | jam   |
+| -: | --------------- | ------ | ----- |
+|  1 | Pemrograman Web | Senin  | 08:00 |
+|  2 | Basis Data      | Selasa | 10:00 |
 
-Data yang ingin diambil adalah data dengan `id = 1`.
+Data yang akan diambil adalah data dengan `id = 1`.
 
-## B. SQL Mentah
+---
 
-SQL mentah digunakan dengan menuliskan query SQL secara langsung.
+## 2. Implementasi Menggunakan SQL Mentah
+
+SQL mentah adalah pendekatan ketika programmer menuliskan perintah SQL secara langsung untuk berkomunikasi dengan database.
+
+Query yang digunakan untuk mengambil data jadwal berdasarkan ID adalah:
 
 ```sql
 SELECT *
@@ -24,7 +29,9 @@ FROM jadwal
 WHERE id = ?;
 ```
 
-Jika menggunakan Node.js dengan `mysql2`, contohnya:
+Tanda `?` digunakan sebagai parameter agar nilai ID tidak langsung digabungkan ke dalam query.
+
+Jika menggunakan Node.js dan library `mysql2`, contohnya dapat ditulis sebagai berikut:
 
 ```javascript
 const [rows] = await connection.execute(
@@ -35,11 +42,15 @@ const [rows] = await connection.execute(
 console.log(rows);
 ```
 
-Query tersebut digunakan untuk mengambil satu data dari tabel `jadwal` berdasarkan ID.
+Pada contoh tersebut, nilai `1` digunakan sebagai ID jadwal yang ingin dicari. Database kemudian akan mengembalikan data dari tabel `jadwal` yang memiliki ID tersebut.
 
-## C. ORM
+---
 
-Operasi yang sama dapat dilakukan menggunakan ORM seperti Prisma.
+## 3. Implementasi Menggunakan ORM
+
+ORM atau **Object-Relational Mapping** merupakan pendekatan yang memungkinkan programmer berinteraksi dengan database menggunakan objek dan sintaks pemrograman, sehingga tidak selalu harus menulis query SQL secara langsung.
+
+Contoh penggunaan ORM Prisma untuk mengambil data jadwal dengan ID `1` adalah:
 
 ```javascript
 const jadwal = await prisma.jadwal.findUnique({
@@ -51,64 +62,117 @@ const jadwal = await prisma.jadwal.findUnique({
 console.log(jadwal);
 ```
 
-Dengan ORM, programmer tidak perlu menuliskan query SQL secara langsung untuk operasi tersebut. Prisma menggunakan model dan method untuk mengakses database.
+Pada kode tersebut, `findUnique()` digunakan untuk mencari satu data yang memiliki nilai unik tertentu. Prisma akan menerjemahkan operasi tersebut menjadi query database yang sesuai.
 
-## D. Perbandingan SQL Mentah dan ORM
+---
 
-| Aspek         | SQL Mentah                            | ORM                                  |
-| ------------- | ------------------------------------- | ------------------------------------ |
-| Penulisan     | Menggunakan query SQL secara langsung | Menggunakan model dan method ORM     |
-| Kontrol query | Lebih besar                           | Lebih abstrak                        |
-| Kemudahan     | Membutuhkan pemahaman SQL             | Lebih mudah untuk operasi umum       |
-| Fleksibilitas | Sangat fleksibel                      | Bergantung pada fitur ORM            |
-| Pengembangan  | Query dikelola programmer             | Struktur model membantu pengembangan |
-| Abstraksi     | Rendah                                | Tinggi                               |
+## 4. Perbedaan SQL Mentah dan ORM
 
-## E. Jawaban Pertanyaan
+SQL mentah mengharuskan programmer menulis perintah SQL secara langsung, seperti `SELECT`, `INSERT`, `UPDATE`, dan `DELETE`. Dengan cara ini, programmer memiliki kontrol yang lebih besar terhadap query yang dijalankan oleh database.
 
-### 1. Apa perbedaan SQL mentah dan ORM?
+Sementara itu, ORM menyediakan cara untuk mengakses database melalui bahasa pemrograman dan objek. Programmer dapat menggunakan fungsi atau method yang disediakan ORM tanpa harus menulis seluruh query SQL secara langsung.
 
-SQL mentah merupakan pendekatan ketika programmer menulis perintah SQL secara langsung untuk berkomunikasi dengan database. Sedangkan ORM memberikan lapisan abstraksi sehingga programmer dapat mengakses database menggunakan model, objek, dan method yang disediakan oleh ORM.
+Perbandingan keduanya dapat dilihat pada tabel berikut:
 
-### 2. Apa kelebihan SQL mentah?
+| Aspek                | SQL Mentah                          | ORM                                              |
+| -------------------- | ----------------------------------- | ------------------------------------------------ |
+| Cara penggunaan      | Menulis query SQL secara langsung   | Menggunakan objek dan method ORM                 |
+| Kontrol query        | Lebih tinggi                        | Banyak bagian ditangani ORM                      |
+| Kemudahan penggunaan | Membutuhkan pemahaman SQL           | Lebih sederhana untuk operasi umum               |
+| Fleksibilitas        | Sangat fleksibel                    | Bergantung pada fitur ORM                        |
+| Pengelolaan database | Dilakukan lebih langsung            | Dibantu oleh ORM                                 |
+| Cocok untuk          | Query kompleks dan kebutuhan khusus | Pengembangan aplikasi dengan banyak operasi CRUD |
 
-SQL mentah memberikan kontrol yang lebih besar terhadap query yang dijalankan. Programmer dapat membuat query yang kompleks dan memanfaatkan fitur khusus dari database secara lebih langsung.
+---
 
-### 3. Apa kelebihan ORM?
+## 5. Kelebihan SQL Mentah
 
-ORM membuat kode akses database menjadi lebih sederhana dan terstruktur. Programmer dapat menggunakan method yang tersedia pada ORM tanpa harus menulis query SQL secara manual untuk setiap operasi database.
+SQL mentah memiliki beberapa kelebihan, yaitu:
 
-### 4. Apa risiko SQL injection?
+1. **Kontrol query lebih besar**, karena programmer dapat menentukan query yang ingin dijalankan secara langsung.
+2. **Fleksibel**, terutama ketika membutuhkan query yang kompleks atau fitur database tertentu.
+3. **Mudah memahami proses database**, karena perintah yang ditulis langsung menggunakan sintaks SQL.
+4. **Dapat digunakan untuk optimasi query tertentu**, terutama ketika programmer memahami cara kerja database dengan baik.
 
-SQL injection adalah serangan yang terjadi ketika input pengguna dimasukkan ke dalam query SQL secara tidak aman. Penyerang dapat memanfaatkan input tersebut untuk mengubah struktur atau tujuan query sehingga data dapat diakses atau dimanipulasi tanpa izin.
+Namun, penggunaan SQL mentah juga membutuhkan pemahaman SQL yang cukup agar query yang dibuat benar dan aman.
 
-Contoh kode yang tidak aman:
+---
+
+## 6. Kelebihan ORM
+
+ORM juga memiliki beberapa kelebihan dalam pengembangan aplikasi, antara lain:
+
+1. **Kode lebih mudah digunakan** untuk operasi database yang umum.
+2. **Mengurangi kebutuhan menulis query SQL secara langsung**.
+3. **Membantu programmer mengelola hubungan antar tabel** melalui model yang tersedia pada ORM.
+4. **Kode dapat lebih mudah dipelihara** karena operasi database menggunakan struktur yang konsisten.
+5. **Membantu mengurangi kesalahan dalam penulisan query** pada operasi database sederhana.
+
+Dengan ORM seperti Prisma, programmer dapat melakukan operasi database melalui JavaScript atau TypeScript tanpa harus menulis query SQL secara manual untuk setiap operasi.
+
+---
+
+## 7. Risiko SQL Injection
+
+SQL injection adalah salah satu risiko keamanan ketika input dari pengguna dimasukkan ke dalam query SQL secara langsung tanpa pengamanan yang tepat.
+
+Contoh yang tidak aman adalah ketika input pengguna langsung digabungkan ke dalam query:
 
 ```javascript
-const query = "SELECT * FROM jadwal WHERE id = " + id;
+const id = req.query.id;
+
+const query = `SELECT * FROM jadwal WHERE id = ${id}`;
 ```
 
-Jika nilai `id` berasal dari input pengguna dan langsung digabungkan ke query, aplikasi dapat menjadi rentan terhadap SQL injection.
+Jika input pengguna tidak divalidasi atau diproses dengan benar, penyerang dapat mencoba memasukkan input tertentu yang mengubah maksud query SQL.
 
-### 5. Mengapa penggunaan parameter query dapat mengurangi risiko SQL injection?
+Risiko tersebut dapat menyebabkan data yang tidak seharusnya dapat dibaca, diubah, atau dihapus.
 
-Parameter query memisahkan nilai input dari struktur perintah SQL. Nilai yang diberikan pengguna diperlakukan sebagai data dan bukan sebagai bagian dari sintaks SQL.
+---
+
+## 8. Mengurangi Risiko SQL Injection dengan Parameter Query
+
+Salah satu cara untuk mengurangi risiko SQL injection adalah menggunakan **parameterized query** atau prepared statement.
 
 Contohnya:
 
 ```javascript
 const [rows] = await connection.execute(
   'SELECT * FROM jadwal WHERE id = ?',
-  [id]
+  [1]
 );
 ```
 
-Dengan pendekatan tersebut, nilai `id` diberikan sebagai parameter sehingga tidak langsung digabungkan dengan query SQL.
+Pada contoh tersebut, query dan nilai parameter dipisahkan. Nilai `1` tidak langsung digabungkan ke dalam string SQL.
 
-### 6. Bagaimana ORM membantu programmer dalam mengakses database?
+Cara ini membuat input diperlakukan sebagai nilai data, bukan sebagai bagian dari perintah SQL. Oleh karena itu, penggunaan parameter query jauh lebih aman dibandingkan menggabungkan input pengguna langsung ke dalam query SQL.
 
-ORM menyediakan model dan method yang dapat digunakan programmer untuk melakukan operasi database. Programmer dapat melakukan operasi seperti mengambil, menambahkan, mengubah, dan menghapus data melalui kode program tanpa harus selalu menulis SQL secara manual.
+---
 
-## F. Kesimpulan
+## 9. Peran ORM dalam Mengakses Database
 
-SQL mentah dan ORM memiliki tujuan yang sama, yaitu membantu aplikasi berkomunikasi dengan database, tetapi pendekatannya berbeda. SQL mentah memberikan kontrol yang lebih besar terhadap query, sedangkan ORM memberikan abstraksi sehingga proses pengembangan menjadi lebih sederhana dan terstruktur. Keduanya tetap membutuhkan perhatian terhadap keamanan, terutama dalam menangani input pengguna agar aplikasi tidak rentan terhadap SQL injection.
+ORM membantu programmer mengakses database dengan menyediakan representasi tabel dalam bentuk model atau objek. Programmer dapat melakukan operasi seperti mengambil, menambahkan, mengubah, dan menghapus data menggunakan method yang disediakan ORM.
+
+Pada contoh Prisma:
+
+```javascript
+const jadwal = await prisma.jadwal.findUnique({
+  where: {
+    id: 1
+  }
+});
+```
+
+Programmer cukup menentukan model `jadwal` dan kondisi pencarian. Prisma kemudian menangani proses pembuatan dan pengiriman query ke database.
+
+Dengan demikian, ORM dapat membuat proses pengembangan aplikasi menjadi lebih praktis, terutama ketika aplikasi memiliki banyak tabel dan operasi database.
+
+---
+
+## 10. Kesimpulan
+
+SQL mentah dan ORM sama-sama dapat digunakan untuk mengakses database, tetapi keduanya memiliki pendekatan yang berbeda. SQL mentah memberikan kontrol yang lebih besar terhadap query karena programmer menulis perintah SQL secara langsung. Sementara itu, ORM memberikan cara yang lebih praktis dengan menggunakan model dan method dari bahasa pemrograman.
+
+Pada operasi mengambil satu data berdasarkan ID dari tabel `jadwal`, SQL mentah dapat menggunakan query `SELECT` dengan parameter, sedangkan Prisma dapat menggunakan method `findUnique()`. Pemilihan antara SQL mentah dan ORM dapat disesuaikan dengan kebutuhan aplikasi, kompleksitas query, serta kemampuan programmer dalam mengelola database.
+
+Penggunaan parameter query juga penting untuk mengurangi risiko SQL injection. Oleh karena itu, baik menggunakan SQL mentah maupun ORM, keamanan dalam mengolah input pengguna tetap harus diperhatikan.
